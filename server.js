@@ -49,59 +49,62 @@ con.connect(function(err) {
 const server = require('http').createServer(app);
 app.set("views", __dirname + "/views");
 app.get('/userpage', function (req, res) {
-  app.use(express.static(__dirname + '/public'));
-  app.get('/', function (req, res) {
-    res.render('Connection.ejs');
-  });
-  app.get('/drive', function (req, res) {
-    res.render('drive.ejs');
-  });
-  app.get('/connection', function (req, res) {
-    res.render('Connection.ejs');
-
-  });
-
-  app.post('/test/submit', function (req, data) {
-    //recupere le password
-    var Password = req.body.loginPassword;
-    //recupere le login
-    var Name = req.body.loginName;
-
-  });
-  app.get('/signup', function (req, res) {
-    res.render('SignUp.ejs');
-  });
-  app.get('/pageuser', function (req, res) {
-    res.render('UserPageJoe.ejs');
-  });
-  app.set('view engine', 'ejs');
-
-
-  // con.query("SELECT * FROM user", function (err, result, fields) {
-  //   if (err) throw err;
-  //   try {
-  //     Object.keys(result).forEach(function (key) {
-  //       var row = result[key];
-  //       var login = row.login;
-  //       var mail = row.mail;
-  //       var phone = row.phone;
-  //       var vitalnumber = row.vitalnumber;
-  //       var type = row.type;
-  //       res.render("UserPage", {
-  //         login: login,
-  //         mail: mail,
-  //         phone: phone,
-  //         vitalnumber: vitalnumber,
-  //         type: type
-  //       });
-
-  //     });
-
-  //   } catch {
-  //     res.send("error");
-  //   }
-  // });
+  res.render('UserPage.ejs');
 });
+
+app.use(express.static(__dirname + '/public'));
+app.get('/', function (req, res) {
+  res.render('Connection.ejs');
+});
+app.get('/drive', function (req, res) {
+  res.render('drive.ejs');
+});
+app.get('/connection', function (req, res) {
+  res.render('Connection.ejs');
+
+});
+
+app.post('/test/submit', function (req, data) {
+  //recupere le password
+  var Password = req.body.loginPassword;
+  //recupere le login
+  var Name = req.body.loginName;
+
+});
+app.get('/signup', function (req, res) {
+  res.render('SignUp.ejs');
+});
+app.get('/pageuser', function (req, res) {
+  res.render('UserPageJoe.ejs');
+});
+app.set('view engine', 'ejs');
+
+
+// con.query("SELECT * FROM user", function (err, result, fields) {
+//   if (err) throw err;
+//   try {
+//     Object.keys(result).forEach(function (key) {
+//       var row = result[key];
+//       var login = row.login;
+//       var mail = row.mail;
+//       var phone = row.phone;
+//       var vitalnumber = row.vitalnumber;
+//       var type = row.type;
+//       res.render("UserPage", {
+//         login: login,
+//         mail: mail,
+//         phone: phone,
+//         vitalnumber: vitalnumber,
+//         type: type
+//       });
+
+//     });
+
+//   } catch {
+//     res.send("error");
+//   }
+// });
+// });
 app.get('/visio', function (req, res) {
   res.render('visio.ejs');
 });
