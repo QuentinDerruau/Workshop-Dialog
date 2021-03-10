@@ -12,18 +12,12 @@ import {
     logError
 } from './functions.js';
 
-const connectPage= document.querySelector('#connectPage');
-const disconnectBtn = document.querySelector('#disconnect');
-const name = "Franck";
-const recipientName = "Joe";
+const connectBtn = document.querySelector('#connect');
+const name = document.getElementById('name');
+const recipientName = document.getElementById('recipient');
 const message = document.querySelector('#message');
-const messagepage = document.querySelector('#messagepage');
 const sendMessage = document.querySelector('#sendMessage');
-const sendMessagepage = document.querySelector('#sendMessagepage');
 const chatArea = document.querySelector('#chatArea');
-const visio = document.querySelector('#visio');
-const JoinConv = document.querySelector('#JoinConv');
-
 
 let room;
 let socket;
@@ -51,18 +45,21 @@ const SIGNAL_TYPES = {
     SDP: 'SDP'
 }
 
-connectPage.addEventListener('click', (e) => {
+
+connectBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    
-    connect(name, recipientName);
-    
+    if (!name.value || !recipientName.value) {
+        return;
+    }
+    connect(name.value, recipientName.value);
+    hideElement('connect-section');
     displayElement('chat-section');
-    messagepage.focus();
+    message.focus();
 });
 
 /**
  * @brief connect two users via webRTC
- * @param {string} userFrom
+ * @param {string} userFrom 
  * @param {string} userTo 
  */
 function connect(userFrom, userTo) {
@@ -185,25 +182,7 @@ sendMessage.addEventListener('click', (e) => {
     displayMessage(chatArea, message.value);
     message.value = '';
 });
-sendMessagepage.addEventListener('click', (e) => {
-    e.preventDefault();
-    if (!messagepage.value) {
-        return;
-    }
 
-    // if it's open we send, else we queue
-    if (signalingChannel.readyState === 'open') {
-        signalingChannel.send(messagepage.value);
-    } else {
-        signalingMsgQueue.push(messagepage.value);
-    }
-    displayMessage(chatArea, messagepage.value);
-    messagepage.value = '';
-});
-const drive = document.querySelector('#drive');
-        drive.addEventListener('click', (e) =>{
-                window.location.href = "./drive";
-        })
 
 
 
@@ -225,10 +204,8 @@ function startSignaling() {
     // once remote stream arrives, show it in the remote video element
     rtcPeerConn.ontrack = onTrack
 
-}
-function onStream(){
-        // get a local stream, show it in our video tag and add it to be sent
-        startStream()
+    // get a local stream, show it in our video tag and add it to be sent
+    startStream()
         .then(stream => displayStream(stream, myVideoArea))
         .then(stream => {
             stream.getTracks().forEach(track => {
@@ -238,17 +215,7 @@ function onStream(){
         })
         .catch((e) => logError(e, `Could not start stream`));
 }
-JoinConv.addEventListener('click', (e)=>{
-    onStream();
-    userpage.classList.remove('userPage');
-    displayElement('visio');
-    hideElement('userpage');
-});
-disconnectBtn.addEventListener('click', (e)=>{
-    userpage.classList.add('userPage');
-    hideElement('visio');
-    displayElement('userpage');
-});
+
 function onTrack(e) {
     displayStream(e.streams[0], otherVideoArea);
 }

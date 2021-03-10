@@ -7,15 +7,21 @@ let signalingId = 1;
 
 function connectUsers(userFrom, userTo, socket) {
     let room;
-    finishConnectionBetweenUsers(userTo, userFrom);
-    room = `${userTo}${userFrom}`.replace(' ', '');
-        
+    if (!alreadyAsked(userFrom, userTo)) {
+        if (!alreadyAsked(userTo, userFrom)) {
+            startConnectionBetweenUsers(userFrom, userTo);
+            room = `${userFrom}${userTo}`.replace(' ', '');
+        } else {
+            finishConnectionBetweenUsers(userTo, userFrom);
+            room = `${userTo}${userFrom}`.replace(' ', '');
+        }
         if (!rooms[room]) {
             rooms[room] = [];
         }
         rooms[room].push(userFrom);
         joinRoom(room, socket);
     }
+}
 
 function generateSignalingIdForRoom(room) {
     if (!uuids[room]) {
