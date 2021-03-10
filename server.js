@@ -8,7 +8,9 @@ const app = express();
 var mysql = require('mysql');
 const bp = require('body-parser');
 app.use(bp.json());
-app.use(bp.urlencoded({ extended: true }));
+app.use(bp.urlencoded({
+  extended: true
+}));
 
 
 var bodyParser = require('body-parser');
@@ -43,77 +45,87 @@ con.connect(function(err) {
   });
   
 });
-app.get("/", function(req, res) {
-	res.render('Connection.ejs');
-});
+*/
 const server = require('http').createServer(app);
 app.set("views", __dirname + "/views");
-app.get("/userpage", function(req, res) {
-app.use(express.static(__dirname + '/public'));
+app.get('/userpage', function (req, res) {
+  app.use(express.static(__dirname + '/public'));
+  app.get('/', function (req, res) {
+    res.render('Connection.ejs');
+  });
+  app.get('/drive', function (req, res) {
+    res.render('drive.ejs');
+  });
+  app.get('/connection', function (req, res) {
+    res.render('Connection.ejs');
 
-app.get("/drive", function(req, res) {
-	res.render('drive.ejs');
-});
-app.get('/connection', function(req, res) {
-	res.render('Connection.ejs');
-  
-});*/
+  });
 
-app.post('/test/submit', function(req, data) {
+  app.post('/test/submit', function (req, data) {
     //recupere le password
     var Password = req.body.loginPassword;
     //recupere le login
     var Name = req.body.loginName;
-    
-});
-app.get('/signup', function(req, res) {
-	res.render('SignUp.ejs');
-});
-app.get('/pageuser', function(req, res) {
-	res.render('UserPageJoe.ejs');
-});
-app.set('view engine', 'ejs');
 
-	
-  con.query("SELECT * FROM user", function (err, result, fields) {
-    if (err) throw err;
-    try {
-    Object.keys(result).forEach(function(key) {
-    var row = result[key];
-    var login = row.login;
-    var mail = row.mail;
-    var phone = row.phone;
-    var vitalnumber = row.vitalnumber;
-    var type= row.type;
-    res.render("UserPage", {login: login, mail: mail, phone:phone, vitalnumber:vitalnumber, type:type});
-    
   });
-  
-  }catch {
-    res.send("error");
-  }
-});
+  app.get('/signup', function (req, res) {
+    res.render('SignUp.ejs');
+  });
+  app.get('/pageuser', function (req, res) {
+    res.render('UserPageJoe.ejs');
+  });
+  app.set('view engine', 'ejs');
 
-app.get('/visio', function(req, res) {
-	res.render('visio.ejs');
+
+  // con.query("SELECT * FROM user", function (err, result, fields) {
+  //   if (err) throw err;
+  //   try {
+  //     Object.keys(result).forEach(function (key) {
+  //       var row = result[key];
+  //       var login = row.login;
+  //       var mail = row.mail;
+  //       var phone = row.phone;
+  //       var vitalnumber = row.vitalnumber;
+  //       var type = row.type;
+  //       res.render("UserPage", {
+  //         login: login,
+  //         mail: mail,
+  //         phone: phone,
+  //         vitalnumber: vitalnumber,
+  //         type: type
+  //       });
+
+  //     });
+
+  //   } catch {
+  //     res.send("error");
+  //   }
+  // });
+});
+app.get('/visio', function (req, res) {
+  res.render('visio.ejs');
 });
 server.listen(PORT);
 
-const wss = new WebSocketServer({server});
+const wss = new WebSocketServer({
+  server
+});
 
 let sockets = [];
 
-wss.on('connection', function(socket) {
+wss.on('connection', function (socket) {
   sockets.push(socket);
 
-  socket.on('message', function(msg) {
+  socket.on('message', function (msg) {
     handleMessage(parseMsg(msg), this);
   });
 
   // When a socket closes, or disconnects, remove it from the array.
-  socket.on('close', function() {
+  socket.on('close', function () {
     sockets = sockets.filter(s => s !== socket);
-    handleMessage({type: TYPES.DISCONNECTING}, socket);
+    handleMessage({
+      type: TYPES.DISCONNECTING
+    }, socket);
   });
 });
 
@@ -129,12 +141,15 @@ const SIGNAL_TYPES = {
   USER_HERE: 'userHere'
 }
 
-function handleMessage({type, content}, socket) {
+function handleMessage({
+  type,
+  content
+}, socket) {
   switch (type) {
     case TYPES.NEW_USER:
       onNewUser(content, socket);
       break;
-    case TYPES.SIGNAL_MESSAGE_FROM_CLIENT: 
+    case TYPES.SIGNAL_MESSAGE_FROM_CLIENT:
       onSignal(content, socket);
       break;
     case TYPES.DISCONNECTING:
@@ -145,31 +160,55 @@ function handleMessage({type, content}, socket) {
   };
 }
 
-function onNewUser({userFrom, userTo}, socket) {
+function onNewUser({
+  userFrom,
+  userTo
+}, socket) {
 
-    chatServer.connectUsers(userFrom, userTo, socket);
-    const signalingUiid = chatServer.generateSignalingIdForRoom(socket.room);
-    
-    const roomMsg = prepareMsg({type: TYPES.JOINED_ROOM, content: {room: socket.room}});
-    broadcastToMe(roomMsg, socket);
-    
-    const signalingMsg = prepareMsg({type: TYPES.SIGNAL_MESSAGE_TO_CLIENT, content: {signalType: SIGNAL_TYPES.USER_HERE, message: signalingUiid}});
-    broadcastToMe(signalingMsg, socket);
-    
-		if (chatServer.areUsersConnected(userFrom, userTo)) {
-			console.log(`User ${userFrom} and user ${userTo} are now connected to room ${socket.room}`);
+  chatServer.connectUsers(userFrom, userTo, socket);
+  const signalingUiid = chatServer.generateSignalingIdForRoom(socket.room);
+
+  const roomMsg = prepareMsg({
+    type: TYPES.JOINED_ROOM,
+    content: {
+      room: socket.room
     }
+  });
+  broadcastToMe(roomMsg, socket);
+
+  const signalingMsg = prepareMsg({
+    type: TYPES.SIGNAL_MESSAGE_TO_CLIENT,
+    content: {
+      signalType: SIGNAL_TYPES.USER_HERE,
+      message: signalingUiid
+    }
+  });
+  broadcastToMe(signalingMsg, socket);
+
+  if (chatServer.areUsersConnected(userFrom, userTo)) {
+    console.log(`User ${userFrom} and user ${userTo} are now connected to room ${socket.room}`);
+  }
 }
 
-function onSignal({signalType, message}, socket) {
-  const signalingMsg = prepareMsg({type: TYPES.SIGNAL_MESSAGE_TO_CLIENT, content: {signalType, message, room: socket.room}});
+function onSignal({
+  signalType,
+  message
+}, socket) {
+  const signalingMsg = prepareMsg({
+    type: TYPES.SIGNAL_MESSAGE_TO_CLIENT,
+    content: {
+      signalType,
+      message,
+      room: socket.room
+    }
+  });
   console.log('signaling message to broadcast', signalingMsg);
   broadcastToRoomButMe(signalingMsg, socket);
 }
 
 function onDisconnecting(socket) {
-  	console.log('disconnecting from socket');
-		chatServer.disconnectUsers(socket.room);
+  console.log('disconnecting from socket');
+  chatServer.disconnectUsers(socket.room);
 }
 
 function prepareMsg(msg) {
