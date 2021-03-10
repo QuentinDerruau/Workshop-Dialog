@@ -12,7 +12,7 @@ app.use(bp.urlencoded({ extended: true }));
 
 
 var bodyParser = require('body-parser');
-
+/*
 var con = mysql.createConnection({
   host: "localhost",
   user: "root",
@@ -24,7 +24,7 @@ var con = mysql.createConnection({
 con.connect(function(err) {
   if (err) throw err;
   console.log('Connected!');
-  /*
+  
   con.query('CREATE DATABASE Medly', function (err, result) {  
     if (err) throw err;  
     console.log('Database created'); 
@@ -41,7 +41,7 @@ con.connect(function(err) {
     if (err) throw err;
     console.log("1 record inserted");
   });
-  */
+  
 });
 app.get("/", function(req, res) {
 	res.render('Connection.ejs');
@@ -57,7 +57,7 @@ app.get("/drive", function(req, res) {
 app.get('/connection', function(req, res) {
 	res.render('Connection.ejs');
   
-});
+});*/
 
 app.post('/test/submit', function(req, data) {
     //recupere le password
@@ -93,7 +93,7 @@ app.set('view engine', 'ejs');
     res.send("error");
   }
 });
-});
+
 app.get('/visio', function(req, res) {
 	res.render('visio.ejs');
 });
