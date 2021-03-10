@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>WebRTC</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    
+    <script src="js/app.js" type="module"></script>
+    <script src="js/chat.js" type="module"></script>
+
+</head>
+<body>
+    <header>
+        <div class="header_bloc">
+          <div class="logo">
+            <img src="img/logo.png" alt="">
+          </div>
+          <div class="search_bar">
+            <input type="text" name="" value="" placeholder="Recherchez un professionnel de santé …">
+          </div>
+          <div class="profil">
+            <div class="avatar">
+              <img src="img/JimFranck.png" alt="">
+            </div>
+            <div class="avatar_name">
+              <p>Jim Franck</p>
+            </div>
+            <div class="">
+              <img src="img/dropdown.png" alt="">
+            </div>
+          </div>
+        </div>
+      </header>
+      <main>
+      <div class="userPage" id="userpage">
+        
+        <div class="sidebar">
+          <div class="sidebar_item">
+            <div class="icon_item">
+              <img src="img/bell.png" alt="">
+            </div>
+            <p>Notifications</p>
+          </div>
+          <div class="sidebar_item">
+            <div class="icon_item">
+              <img src="img/chat.png" alt="">
+            </div>
+            <p>Messages</p>
+          </div>
+          <div class="sidebar_item">
+            <div class="icon_item">
+              <img src="img/agenda.png" alt="">
+            </div>
+            <p>Agenda</p>
+          </div>
+          <div id="drive" class="sidebar_item">
+            <div class="icon_item">
+              <img src="img/documents.png" alt="">
+            </div>
+            <p>Documents</p>
+          </div>
+          <div class="sidebar_item">
+            <div class="icon_item">
+              <img src="img/account.png" alt="">
+            </div>
+            <p>Mon compte</p>
+          </div>
+        </div>
+    <div class="doctors">
+    <div id="connectPage" class="doctor flex">
+      <div class="avatar">
+        <img src="img/avatar1.png" alt="">
+      </div>
+    <div>
+        <h3 style="margin: 0;text-align: left;">Jhon Doe</h3>
+        <h4 style="margin: 0;">Merci beaucoup ! :)</h4>
+    </div>
+  </div>
+  <div id="connectPage" class="doctor flex">
+    <div class="avatar">
+      <img src="img/SarahHector.png" alt="">
+    </div>
+  <div>
+      <h3 style="margin: 0;text-align: left;">Sarah Hector</h3>
+      <h4 style="margin: 0;">Merci beaucoup ! :)</h4>
+  </div>
+</div>
+<div id="connectPage" class="doctor flex">
+  <div class="avatar">
+    <img src="img/VioletteDun.png" alt="">
+  </div>
+<div>
+    <h3 style="margin: 0;text-align: left;">Violette Dun</h3>
+    <h4 style="margin: 0;">Dernier message</h4>
+</div>
+
+</div>
+<div id="connectPage" class="doctor flex">
+  <div class="avatar">
+    <img src="img/LeonieDass.png" alt="">
+  </div>
+<div>
+    <h3 style="margin: 0;text-align: left;">Leonie Dass</h3>
+    <h4 style="margin: 0;">Dernier message</h4>
+</div>
+</div>
+  </div>
+    <section id="chat-section" class="display-none">
+        <div class="content">
+        <div class="flex space"><div>
+            <h1>John Doe</h1>
+            <h3>Généraliste</h3>
+        </div>
+        <button id="JoinConv">Rejoindre votre Rendez-vous</button>
+        </div>
+        <div id="chatArea"><br/></div>
+        </div>
+        <form class="inputMessage content widthmax flex center content">
+            <input placeholder="Ecrivez votre message ..." id="messagepage" type="text" style="height: 20px; width: 300px;"/><br/>
+            <input id="sendMessagepage" type="submit"/>
+        </form>
+    </section>
+    </div>
+<div id="visio" class="display-none">
+  <video class="camDoc" id="myVideoArea" autoplay muted></video>
+  <video class="camUser" id="otherVideoArea" autoplay></video>
+  
+      <button id="disconnect">Disconnect</button>
+  <form>  
+      <div class="flex ecrire">
+          <input id="message" type="text" style="height: 20px; width: 300px;"/><br/>
+          <input id="sendMessage" type="submit"/>
+      </div>
+      </form>
+      <div class="chatArea" id="chatArea"><br/></div>
+  </div>
+    
+    
+</body>
+</html>

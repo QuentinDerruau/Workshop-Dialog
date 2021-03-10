@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>WebRTC</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="js/Connection.js" type="module"></script>
+</head>
+<body>
+    
+    <form action="/test/submit" method="post">
+        <label  for="loginName"></label>
+        <input name="loginName" id="loginName" type="text">
+        <label for="loginPassword"></label>
+        <input name="loginPassword" id="loginPassword" type="password">
+        <input type="submit" id="LoginConnect">Connect</input>
+    </form>
+
+    <button id="SignUp">SignUp</button>
+    <a href="/userpage">Join as Franck</a>
+    <a href="/pageuser">Join as Jonh</a>   
+</body>
+</html>

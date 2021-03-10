@@ -14,8 +14,8 @@ import {
 
 const connectPage= document.querySelector('#connectPage');
 const disconnectBtn = document.querySelector('#disconnect');
-const name = "Franck";
-const recipientName = "Joe";
+const name = "Joe";
+const recipientName = "Franck";
 const message = document.querySelector('#message');
 const messagepage = document.querySelector('#messagepage');
 const sendMessage = document.querySelector('#sendMessage');
@@ -23,7 +23,8 @@ const sendMessagepage = document.querySelector('#sendMessagepage');
 const chatArea = document.querySelector('#chatArea');
 const visio = document.querySelector('#visio');
 const JoinConv = document.querySelector('#JoinConv');
-let senders = [];
+
+
 let room;
 let socket;
 
@@ -64,7 +65,7 @@ connectPage.addEventListener('click', (e) => {
  * @param {string} userFrom
  * @param {string} userTo 
  */
-function connect(userFrom, userTo) {
+function connect(userTo, userFrom) {
     const hostName = location.hostname === 'localhost' ? '127.0.0.1' : location.hostname;
     const protocol = hostName === '127.0.0.1' ? 'ws' : 'wss';
     const port = location.port;
@@ -72,7 +73,7 @@ function connect(userFrom, userTo) {
 
     socket = new WebSocket(wsUrl);
     socket.onopen = () => {
-        onConnect(userFrom, userTo);
+        onConnect(userTo, userFrom);
 
         // If the rtcPeerConnection is not set, we set it
         if (!rtcPeerConn) {
@@ -86,8 +87,8 @@ function connect(userFrom, userTo) {
 
 }
 
-function onConnect(userFrom, userTo) {
-    socket.send(prepareMsg({type: TYPES.NEW_USER, content: {userFrom, userTo}}));
+function onConnect(userTo, userFrom) {
+    socket.send(prepareMsg({type: TYPES.NEW_USER, content: {userTo,userFrom}}));
 }
 
 function prepareMsg(msg) {
@@ -232,7 +233,7 @@ function onStream(){
         .then(stream => {
             stream.getTracks().forEach(track => {
                 // send tracks to peer
-                senders.push(rtcPeerConn.addTrack(track, stream));
+                rtcPeerConn.addTrack(track, stream);
             });
         })
         .catch((e) => logError(e, `Could not start stream`));
@@ -247,10 +248,6 @@ disconnectBtn.addEventListener('click', (e)=>{
     userpage.classList.add('userPage');
     hideElement('visio');
     displayElement('userpage');
-    senders.forEach(sender => {
-        rtcPeerConn.removeTrack(sender);
-    })
-    senders.length = 0
 });
 function onTrack(e) {
     displayStream(e.streams[0], otherVideoArea);
